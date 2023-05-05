@@ -1,0 +1,46 @@
+finish
+/clear
+/PREP7   !vào Preprocessor
+! Khai báo biến
+EE=2e11
+nu=0.3
+A1=1E-4
+A2=2E-4
+FF=10000
+LL=1
+*AFUN,DEG
+
+ET,1,LINK180	!khai báo phần tử LINK180
+MP,EX,1,EE	!khai báo module đàn hồi E
+MP,PRXY,1,nu	!hệ số poisson
+R,1,A1	!khai báo diện tích mặt cắt 1 cm2
+R,2,A2
+
+! Mo hinh
+N,1,0,0,0
+N,2,LL*TAN(30)
+N,3,-LL*TAN(30)
+N,4,0,-LL
+
+REAL,1
+E,4,3
+E,4,2
+REAL,2
+E,4,1
+
+! Điều kiện biên & tải trọng
+D,1,ALL,0
+D,2,ALL,0
+D,3,ALL,0
+F,4,FY,-FF
+
+/SOLU
+SOLVE
+
+/POST1	!vào General Postproc
+PLNSOL, U,SUM, 0,1.0	!Xuất thành phần chuyển vị tổng
+ETABLE,NOILUC,SMISC, 1	!Tạo bảng tính nội lực
+PLLS,NOILUC,NOILUC,1,0	!Xuất kết quả nội lực
+ETABLE,UNGSUAT,LS, 1	!Tạo bảng tính ứng suất
+PLETAB,UNGSUAT,NOAV		!Xuất kết quả ứng suất
+
